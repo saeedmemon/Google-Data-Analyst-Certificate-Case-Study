@@ -9,3 +9,5 @@ In this case study the goal is to see how do annual member riders and casual rid
 4. Once data is cleaned and organized we then start analysis with mean, min, max and median.
 5. Further more analysis with aggregating to show the difference between memebers and causals with previous 4 function.
 6. Created two plots to visualize and give inform insights to stake holders.
+
+**A preview of the html link is [Here]https://htmlpreview.github.io/?https://github.com/saeedmemon/Google-Data-Analyst-Certificate-Case-Study/blob/main/Cyclist-report.html**
