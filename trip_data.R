@@ -12,6 +12,7 @@ library(rmarkdown)
 library(tidyverse)  #helps wrangle data
 library(lubridate)  #helps wrangle date attributes
 library(ggplot2)  #helps visualize data
+library(chron)
 getwd() #displays your working directory
 setwd("Z:/School stuff/Google Data Analytic Certificate/Case study/DATA")
 
@@ -137,13 +138,13 @@ all_trips$day_of_week <- format(as.Date(all_trips$date), "%A")
 
 
 # Convert "ride_length" from Factor to numeric so we can run calculations on the data
+print(all_trips$ride_length)
+converted_time <- as.numeric(times(all_trips$ride_length))
+print(converted_time)
+all_trips$ride_length<-60* 24 * converted_time
+print(all_trips$ride_length)
 
-is.factor(all_trips$ride_length)
-all_trips$ride_length <- as.numeric(as.duration(hms(all_trips$ride_length)),units="minute")
-is.numeric(all_trips$ride_length)
-str(all_trips$ride_length)
-
-
+all_trips <- na.omit(all_trips) #filter out dates with incorrect format, blank etc.
 
 
 
@@ -172,6 +173,8 @@ all_trips$day_of_week <- ordered(all_trips$day_of_week, levels=c("Sunday", "Mond
 # the average ride time by each day for members vs casual users
 aggregate(all_trips$ride_length ~ all_trips$usertype + all_trips$day_of_week, FUN = mean)
 
+print(all_trips$ride_length)
+
 # analyze ridership data by type and weekday
 all_trips %>% 
   mutate(weekday = day_of_week) %>%  #creates weekday field using wday()
@@ -180,7 +183,7 @@ all_trips %>%
             ,average_duration = mean(ride_length)) %>% 		# calculates the average duration
   arrange(usertype, weekday)								# sorts
 
-
+summary(all_trips)
 # visualize the number of rides by rider type
 all_trips %>% 
   mutate(weekday = day_of_week) %>% 
@@ -192,6 +195,7 @@ all_trips %>%
     geom_col(position = "dodge")
 
 # create a visualization for average duration
+
 all_trips %>% 
   mutate(weekday = day_of_week) %>% 
   group_by(usertype, weekday) %>% 
@@ -205,7 +209,6 @@ all_trips %>%
 # STEP 5: EXPORT SUMMARY FILE FOR FURTHER ANALYSIS
 #=================================================
 # Create a csv file that we will visualize in Excel, Tableau, or my presentation software
-# N.B.: This file location is for a Mac. If you are working on a PC, change the file location accordingly (most likely "C:\Users\YOUR_USERNAME\Desktop\...") to export the data. You can read more here: https://datatofish.com/export-dataframe-to-csv-in-r/
 counts <- aggregate(all_trips$ride_length ~ all_trips$usertype + all_trips$day_of_week, FUN = mean)
 write.csv(counts, file = 'Z:/School stuff/Google Data Analytic Certificate/Case study/avg_ride_length.csv')
 
